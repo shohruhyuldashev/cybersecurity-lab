@@ -1,0 +1,5 @@
+# E-GOV EMPLOYEE PORTAL CREDENTIALS
+# DO NOT SHARE
+
+Username: employee
+Password: SecureGov2024!

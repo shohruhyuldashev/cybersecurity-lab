@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # 1. OAuth / SSO Compromise
+  central-idp:
+    build: ./idp
+    ports:
+      - "3000:3000"
+    networks:
+      lab-network:
+        ipv4_address: 172.20.0.10
+    restart: unless-stopped
+
+  # 2. Log4Shell (CVE-2021-44228)
+  # Vulnerable Spring Boot application
+  legacy-logger:
+    image: ghcr.io/christophetd/log4shell-vulnerable-app
+    # PORTS CLOSED FOR REALISM (Internal Only)
+    # ports:
+    #   - "8081:8080"
+    environment:
+      - SWAGGER_TITLE=Legacy Logger API
+    privileged: true # REQUIRED FOR CONTAINER ESCAPE
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    networks:
+      lab-network:
+        ipv4_address: 172.20.0.40
+    restart: unless-stopped
+
+  # 3. Web App (RCE / File Upload)
+  web-frontend:
+    build: ./web-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - central-idp
+      - data-api
+    networks:
+      lab-network:
+        ipv4_address: 172.20.0.20
+    restart: unless-stopped
+
+  # 4. Object Storage Misconfiguration
+  storage-server:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      # WEAK CREDENTIALS!
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - ./minio-seed:/data # SEED DATA MOUNT
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      lab-network:
+        ipv4_address: 172.20.0.50
+    restart: unless-stopped
+
+  # 5. Django SQL Injection
+  data-api:
+    build: ./data-api
+    # PORTS CLOSED FOR REALISM (Internal Only)
+    # ports:
+    #   - "8000:8000"
+    networks:
+      lab-network:
+        ipv4_address: 172.20.0.30
+    restart: unless-stopped
+
+  # 6. Container Escape (Privileged Container)
+  privileged-worker:
+    image: alpine
+    # Mount docker socket for escape vector
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # Keep it running
+    command: tail -f /dev/null
+    networks:
+      lab-network:
+        ipv4_address: 172.20.0.60
+    restart: unless-stopped
+
+networks:
+  lab-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

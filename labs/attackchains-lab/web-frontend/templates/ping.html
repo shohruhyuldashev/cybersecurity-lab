@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Connectivity Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <h1>Network Diagnostics</h1>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Ping Host</h2>
+            <form method="POST">
+                <input type="text" name="target" placeholder="Enter IP or Hostname (e.g., 8.8.8.8)" required>
+                <button type="submit">Check Connectivity</button>
+            </form>
+        </div>
+        {% if output %}
+        <div class="card">
+            <h3>Output:</h3>
+            <pre>{{ output }}</pre>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

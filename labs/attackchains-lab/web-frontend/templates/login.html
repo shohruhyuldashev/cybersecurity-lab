@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>E-Gov Employee Portal | Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <h1>E-Gov Employee Portal</h1>
+    </div>
+    <div class="container">
+        <div class="login-form">
+            <div class="card">
+                <h2>Authorized Personnel Only</h2>
+                <p>Please log in to access internal tools.</p>
+                {% if error %}
+                <div class="alert">{{ error }}</div>
+                {% endif %}
+                <form method="POST">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Secure Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

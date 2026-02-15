@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Document Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <h1>Document Repository</h1>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Upload Official Document</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" required>
+                <button type="submit">Upload to Server</button>
+            </form>
+            {% if message %}
+            <p><strong>{{ message }}</strong></p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
