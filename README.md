@@ -114,5 +114,4 @@ Cybersecurity enthusiast focused on:
 This project is provided for **educational purposes only**.
 Use responsibly.
 
-```yberBro**? 💪
-```
+
