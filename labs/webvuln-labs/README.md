@@ -9,4 +9,6 @@ A Dockerized vulnerable environment to practice:
 - Insecure File Upload
 
 ## Setup
+```
 docker-compose up --build
+```
