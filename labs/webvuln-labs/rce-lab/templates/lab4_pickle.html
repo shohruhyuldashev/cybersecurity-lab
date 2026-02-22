@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 4 — Insecure Deserialization</h2>
+<form method="post">
+    <label class="muted">Base64-encoded data:</label>
+    <textarea name="data" rows="4" placeholder="Paste base64 data..."></textarea>
+    <button>Deserialize</button>
+</form>
+{% if output %}
+<h3>Output</h3>
+<pre>{{ output }}</pre>
+{% endif %}
+{% endblock %}

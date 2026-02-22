@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 3 — DOM-based XSS</h2>
+<p class="muted">Interact with this page and observe the output below.</p>
+<button id="checkBtn" style="margin:10px 0">Check Hash</button>
+<div id="output" class="output-box">Waiting for input...</div>
+
+<script>
+  // Unsafe DOM sink: writing location.hash into innerHTML
+  const hash = location.hash.substring(1);
+  if (hash) {
+    document.getElementById('output').innerHTML = decodeURIComponent(hash);
+  }
+
+  // Check button: generate random hash and set it in URL
+  document.getElementById('checkBtn').addEventListener('click', function () {
+    const arr = new Uint8Array(20);
+    crypto.getRandomValues(arr);
+    const hex = Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+    location.hash = hex;
+    document.getElementById('output').innerHTML = decodeURIComponent(location.hash.substring(1));
+  });
+</script>
+
+{% endblock %}

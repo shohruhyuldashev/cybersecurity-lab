@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 2 — Eval Injection</h2>
+<form method="post" class="lab-form">
+    <input name="expr" placeholder="Enter expression..." />
+    <button>Calculate</button>
+</form>
+{% if result %}
+<h3>Result</h3>
+<pre>{{ result }}</pre>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero card">
+  <p class="lead">Welcome — choose a lab to explore XSS.</p>
+  <p class="muted">Each lab demonstrates a different XSS type in an intentionally vulnerable environment.</p>
+</section>
+
+<section class="lab-grid">
+  <a class="lab-card" href="/lab1">
+    <div class="lab-badge">Lab 1</div>
+    <h3>Reflected XSS</h3>
+    <p class="muted">Input reflected via query parameter; try inserting script payloads.</p>
+  </a>
+
+  <a class="lab-card" href="/lab2">
+    <div class="lab-badge">Lab 2</div>
+    <h3>Stored XSS</h3>
+    <p class="muted">Comments are stored and rendered unsafely; demonstrates persistent XSS.</p>
+  </a>
+
+  <a class="lab-card" href="/lab3">
+    <div class="lab-badge">Lab 3</div>
+    <h3>DOM-based XSS</h3>
+    <p class="muted">Client-side DOM sink writes fragment/hash into the page.</p>
+  </a>
+
+  <a class="lab-card" href="/lab4">
+    <div class="lab-badge">Lab 4</div>
+    <h3>Attribute injection</h3>
+    <p class="muted">User input placed into attributes (title/data-*)—watch for quote-breaking.</p>
+  </a>
+
+  <a class="lab-card" href="/lab5">
+    <div class="lab-badge">Lab 5</div>
+    <h3>Image / Blind</h3>
+    <p class="muted">User-supplied image URLs demonstrate blind interactions and pingbacks.</p>
+  </a>
+</section>
+
+{% endblock %}

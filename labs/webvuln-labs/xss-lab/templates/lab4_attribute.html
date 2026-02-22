@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 4 — Attribute Injection</h2>
+<form method="get" action="/lab4">
+  <input name="v" placeholder="Enter value..." />
+  <button>Go</button>
+</form>
+
+{% if v %}
+<h3>Preview</h3>
+<!-- Vulnerable: user input placed inside attribute and marked safe -->
+<img src="{{ url_for('static', filename='placeholder.svg') }}" alt="demo" title="{{ v|safe }}" />
+<div data-user="{{ v|safe }}" class="output-box">Your input has been applied.</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 1 — Command Injection</h2>
+<form method="post" class="lab-form">
+    <input name="host" placeholder="Enter hostname..." />
+    <button>Ping</button>
+</form>
+{% if output %}
+<h3>Output</h3>
+<pre>{{ output }}</pre>
+{% endif %}
+{% endblock %}

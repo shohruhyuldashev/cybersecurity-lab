@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  main:
+    build: ./main-app
+    ports:
+      - '5000:5000'
+    environment:
+      - PORT=5000
+    volumes:
+      - ./main-app:/app
+
+  xss:
+    build: ./xss-lab
+    ports:
+      - '5001:5001'
+    environment:
+      - PORT=5001
+    volumes:
+      - ./xss-lab:/app
+
+  sqli:
+    build: ./sqli-lab
+    ports:
+      - '5002:5002'
+    environment:
+      - PORT=5002
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASS=rootpass
+    depends_on:
+      - mysql
+    volumes:
+      - ./sqli-lab:/app
+
+  rce:
+    build: ./rce-lab
+    ports:
+      - '5003:5003'
+    environment:
+      - PORT=5003
+    volumes:
+      - ./rce-lab:/app
+
+  upload:
+    build: ./file-upload
+    ports:
+      - '5004:5004'
+    environment:
+      - PORT=5004
+    volumes:
+      - ./file-upload:/app
+
+  lfi:
+    build: ./lfi-lab
+    ports:
+      - '5005:5005'
+    environment:
+      - PORT=5005
+    volumes:
+      - ./lfi-lab:/app
+
+  mysql:
+    image: mysql:8.0
+    container_name: webvuln-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:

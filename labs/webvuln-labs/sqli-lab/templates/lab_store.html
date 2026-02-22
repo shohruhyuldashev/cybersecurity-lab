@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 5 — Stored-style injection (comments)</h2>
+<form method="post">
+  <label>Product id: <input name="product_id" value="1"></label>
+  <label>Text: <input name="text" style="width:60%"></label>
+  <button>Post comment</button>
+</form>
+<p>{{ message }}</p>
+<h3>All comments</h3>
+{% if comments %}
+  <table>
+    <tr><th>id</th><th>product</th><th>text</th></tr>
+    {% for c in comments %}
+      <tr><td>{{ c['id'] }}</td><td>{{ c['name'] }}</td><td>{{ c['text'] }}</td></tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p class="muted">No comments yet</p>
+{% endif %}
+{% endblock %}

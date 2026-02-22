@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Labs Home</title>
+  <style>
+    :root {
+      --bg1: #0f172a;
+      --bg2: #020617;
+      --accent: #22d3ee;
+      --accent2: #a855f7;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: radial-gradient(circle at 20% 20%, #0f172a, #020617 70%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* animated background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.2), transparent 70%);
+      top: -200px;
+      left: -200px;
+      filter: blur(120px);
+      animation: float 8s infinite alternate ease-in-out;
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 70%);
+      bottom: -200px;
+      right: -200px;
+      filter: blur(120px);
+      animation: float 10s infinite alternate ease-in-out;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(0px);
+      }
+
+      to {
+        transform: translateY(40px);
+      }
+    }
+
+    /* Main Card */
+    .wrap {
+      position: relative;
+      max-width: 850px;
+      width: 90%;
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    /* Lab Cards */
+    .card {
+      display: inline-block;
+      padding: 16px 24px;
+      margin: 12px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: bold;
+      letter-spacing: 1px;
+      position: relative;
+      color: white;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      transition: 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transition: 0.5s;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: var(--accent);
+      box-shadow: 0 10px 40px rgba(34, 211, 238, 0.4);
+    }
+
+    /* subtle floating effect */
+    .card:nth-child(1) {
+      animation: float 6s infinite alternate ease-in-out;
+    }
+
+    .card:nth-child(2) {
+      animation: float 7s infinite alternate ease-in-out;
+    }
+
+    .card:nth-child(3) {
+      animation: float 8s infinite alternate ease-in-out;
+    }
+
+    .card {
+      animation: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Security Labs</h1>
+    <p>Use the links below to open each lab (they run on different ports):</p>
+    <div>
+      <a class="card" href="{{ request.scheme }}://{{ request.host.split(':')[0] }}:5001" target="_blank">XSS Labs </a>
+      <a class="card" href="{{ request.scheme }}://{{ request.host.split(':')[0] }}:5002" target="_blank">SQLi Labs </a>
+      <a class="card" href="{{ request.scheme }}://{{ request.host.split(':')[0] }}:5003" target="_blank">RCE Labs </a>
+      <a class="card" href="{{ request.scheme }}://{{ request.host.split(':')[0] }}:5004" target="_blank">File Upload Labs </a>
+      <a class="card" href="{{ request.scheme }}://{{ request.host.split(':')[0] }}:5005" target="_blank">LFI Labs </a>
+    </div>

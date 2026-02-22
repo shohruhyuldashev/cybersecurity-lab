@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 5 — File Include / Path Traversal</h2>
+<form method="post" class="lab-form">
+    <input name="file" placeholder="Enter filename..." />
+    <button>Read</button>
+</form>
+{% if content %}
+<h3>File Contents</h3>
+<pre>{{ content }}</pre>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,2 @@
+Xush kelibsiz! Bu LFI Labs bosh sahifasi.
+Bu laboratoriya Local File Inclusion zaifliklarini o'rganish uchun yaratilgan.

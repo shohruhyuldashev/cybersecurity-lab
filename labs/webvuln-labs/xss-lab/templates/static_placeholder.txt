@@ -1,0 +1,1 @@
+This folder is for static files. Place a placeholder image at templates/static/placeholder.png if desired.

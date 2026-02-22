@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 3 — Server-Side Template Injection</h2>
+<form method="post" class="lab-form">
+    <input name="name" placeholder="Enter your name..." />
+    <button>Greet</button>
+</form>
+{% if output %}
+<h3>Output</h3>
+<pre>{{ output }}</pre>
+{% endif %}
+{% endblock %}

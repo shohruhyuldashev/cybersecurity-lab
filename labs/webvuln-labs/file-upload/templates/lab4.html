@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lab 4 – File Upload Labs</title>
+  <style>
+    :root{--bg:#0b1220;--card:#111827;--accent:#22d3ee;--accent2:#ef4444;--text:#e5e7eb;--muted:#94a3b8;--border:rgba(255,255,255,0.05);}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,#0b1220,#071027);color:var(--text);padding:40px 20px;min-height:100vh;}
+    .card{background:var(--card);padding:30px;border-radius:12px;border:1px solid var(--border);max-width:950px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+    h1{font-size:28px;margin-bottom:15px;color:var(--accent);letter-spacing:1px;}
+    nav{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;}
+    nav a{text-decoration:none;color:var(--muted);padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(15,23,42,0.6);transition:all 0.25s ease;font-size:14px;}
+    nav a:hover{background:rgba(34,211,238,0.1);border-color:var(--accent);color:var(--accent);transform:translateY(-1px);}
+    nav a.active{background:rgba(34,211,238,0.15);border-color:var(--accent);color:var(--accent);}
+    hr{margin:15px 0 25px 0;border:none;border-top:1px solid var(--border);}
+    .muted{color:var(--muted);}
+    pre{background:#020617;padding:15px;border-radius:8px;overflow:auto;border:1px solid var(--border);color:#38bdf8;font-size:14px;}
+    input[type="file"]{width:100%;padding:10px;margin:8px 0;background:#0f172a;border:1px solid var(--border);border-radius:6px;color:var(--text);outline:none;}
+    button{background:var(--accent);color:#000;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:bold;font-family:inherit;transition:0.2s ease;}
+    button:hover{background:#06b6d4;transform:translateY(-2px);}
+    .alert{padding:10px;border-radius:6px;margin-top:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--accent2);}
+    .success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22c55e;}
+    label{display:block;color:var(--muted);font-size:13px;margin-top:12px;margin-bottom:2px;}
+    .hint{background:rgba(34,211,238,0.05);border:1px solid rgba(34,211,238,0.15);border-radius:8px;padding:12px 16px;margin-top:20px;font-size:13px;color:var(--muted);}
+    .hint strong{color:var(--accent);}
+    .info-box{background:#0f172a;border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px;font-size:14px;}
+    .info-box h2{color:var(--accent);margin-bottom:8px;font-size:16px;}
+    .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-bottom:10px;font-weight:bold;}
+    .badge-medium{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.3);}
+    footer{margin-top:30px;text-align:center;color:var(--muted);font-size:13px;opacity:0.6;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>📁 File Upload Labs</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/lab1">Lab 1</a>
+      <a href="/lab2">Lab 2</a>
+      <a href="/lab3">Lab 3</a>
+      <a href="/lab4">Lab 4</a>
+      <a href="/lab5">Lab 5</a>
+    </nav>
+    <hr>
+
+    <span class="badge badge-medium">MEDIUM</span>
+    <div class="info-box">
+      <h2>Lab 4 — MIME Tur Soxtalashtirish</h2>
+      <p class="muted">Serverga fayl yuklashda uni alday olasizmi?</p>
+    </div>
+
+
+    <form method="POST" enctype="multipart/form-data" style="margin-top:20px;">
+      <label>Fayl tanlang:</label>
+      <input type="file" name="file">
+      <button type="submit" style="margin-top:12px;">⬆ Yuklash</button>
+    </form>
+
+    {% if message %}
+      <div class="{% if 'Accepted' in message %}alert success{% else %}alert{% endif %}" style="margin-top:16px;">
+        {{ message }}
+        {% if saved %}
+          — <a href="/uploads/{{ saved }}" target="_blank" style="color:#22d3ee;">Ko'rish ↗</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+
+    <footer>File Upload Labs — Ta'lim maqsadida yaratilgan</footer>
+  </div>
+  <script>
+    document.querySelectorAll('nav a').forEach(a => {
+      if (a.pathname === location.pathname) a.classList.add('active');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 2 — Stored XSS</h2>
+<form method="post" action="/lab2">
+  <label>Comment: <input name="comment" /></label>
+  <button>Post</button>
+</form>
+<h3>All comments</h3>
+<ul>
+  {% for c in comments %}
+    <li>{{ c|safe }}</li>
+  {% else %}
+    <li>No comments yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

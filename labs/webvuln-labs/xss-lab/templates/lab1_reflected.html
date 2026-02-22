@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 1 — Reflected XSS</h2>
+<form method="get" action="/lab1">
+  <input name="q" placeholder="Search..." />
+  <button>Send</button>
+</form>
+{% if q %}
+<h3>Output</h3>
+<div class="output-box">
+  <!-- Intentionally not escaped to demonstrate reflected XSS -->
+  {{ q|safe }}
+</div>
+{% endif %}
+{% endblock %}

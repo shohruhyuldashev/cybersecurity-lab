@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 4 — Boolean-based injection</h2>
+<form>
+  <label>Filter text: <input name="f"></label>
+  <button>Filter</button>
+</form>
+<h3>Results</h3>
+{% if rows %}
+<ul>
+  {% for r in rows %}
+  <li>{{ r['id'] }} - {{ r['name'] }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="muted">No results</p>
+{% endif %}
+{% endblock %}

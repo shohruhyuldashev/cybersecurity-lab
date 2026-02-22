@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 3 — Search / UNION</h2>
+<form>
+  <label>Search name: <input name="name"></label>
+  <button>Search</button>
+</form>
+<h3>Results</h3>
+{% if rows %}
+<ul>
+  {% for r in rows %}
+  <li>{{ r['id'] }} - {{ r['name'] }} — {{ r['description'] }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="muted">No results</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 5 — Image / Blind-type</h2>
+<form method="post" action="/lab5">
+  <input name="img" placeholder="Image URL..." style="width:60%" />
+  <button>Submit</button>
+</form>
+
+<h3>Submitted images</h3>
+<ul>
+  {% for u in imgs %}
+  <li><img src="{{ u|safe }}" alt="user-img" style="max-width:200px" /></li>
+  {% else %}
+  <li>No images yet.</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

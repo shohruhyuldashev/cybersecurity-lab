@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lab 2 — Login bypass</h2>
+<form method="post">
+  <label>Username: <input name="username"></label>
+  <label>Password: <input name="password" type="password"></label>
+  <button>Login</button>
+</form>
+
+<p>{{ message }}</p>
+{% endblock %}

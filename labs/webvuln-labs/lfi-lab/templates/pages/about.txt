@@ -1,0 +1,2 @@
+Bu LFI Labs haqida sahifa.
+LFI - Local File Inclusion zaifliği serverdagi fayllarni o'qish imkonini beradi.
