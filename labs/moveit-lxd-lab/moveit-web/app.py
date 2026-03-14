@@ -39,7 +39,7 @@ def enforce_moveit_domain():
 @app.after_request
 def add_headers(response):
     response.headers["Server"] = "MOVEit Transfer"
-    response.headers["X-MOVEit-Version"] = "2023.1.4"
+    response.headers["X-MOVEit-Version"] = "MOVEit Transfer 2023.0.1"
     return response
 
 app.secret_key = os.environ.get("SECRET_KEY", "moveit-safe-lab-secret")
@@ -392,8 +392,8 @@ def dashboard():
 @app.route("/api/version", methods=["GET"])
 def api_version():
     return {
-        "product": "MOVEit Transfer",
-        "version": "2023.1.4",
+        "product": "MOVEit Transfer 2023.0.1",
+        "version": "2023.0.1",
         "build": "enterprise",
         "api": "v1"
     }
@@ -401,7 +401,7 @@ def api_version():
 @app.route("/api/messages", methods=["GET"])
 def api_messages():
     return {
-        "product": "MOVEit Transfer",
+        "product": "MOVEit Transfer 2023.0.1",
         "api": "v1",
         "count": 23,
         "question_count": 8,
@@ -458,7 +458,7 @@ def api_messages():
                 "id": 9,
                 "author": "security.team",
                 "type": "question",
-                "message": "In MOVEit Transfer 2023.1.3, was there a SQLi File Write vulnerability in the file upload transfer notes component, and did administrators confirm whether this issue was fixed in version 2023.1.4 or not?"
+                "message": "In MOVEit Transfer 2023.0.1, was there a SQLi File Write vulnerability in the file upload transfer notes component, and did administrators confirm whether this issue was fixed in MOVEit Transfer 2023.0.1 or not?"
             },
             {
                 "id": 10,
@@ -530,7 +530,7 @@ def api_messages():
                 "id": 21,
                 "author": "alice.bennett",
                 "type": "question",
-                "message": "Has the 2023.1.4 rollout been completed on every environment?"
+                "message": "Has the MOVEit Transfer 2023.0.1 rollout been completed on every environment?"
             },
             {
                 "id": 22,
@@ -632,7 +632,7 @@ def upload():
         return redirect(url_for("files"))
 
     return render_template("upload.html", user=user,
-                           review_target="Inspect the upload metadata handler in app.py for defensive code review.")
+                           review_target="Inspect the MOVEit Transfer 2023.0.1 upload metadata handler in app.py for defensive code review.")
 
 
 @app.route("/files")

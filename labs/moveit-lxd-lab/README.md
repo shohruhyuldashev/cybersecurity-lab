@@ -76,7 +76,7 @@ This lab contains a single intended attack chain designed for educational purpos
 
 ### Step 2: Discover Service Version Disclosure
 - Access the public endpoint `/readme.txt` to obtain version information.
-- Note the version `2023.1.4` and the security advisory mentioning a SQL injection vulnerability similar to CVE-2023-34362.
+- Note the version `MOVEit Transfer 2023.0.1` and the security advisory mentioning a SQL injection vulnerability similar to CVE-2023-34362.
 
 ### Step 3: Identify the Vulnerability
 - On the `/upload` page, examine the form fields: filename, description, and transfer notes.
