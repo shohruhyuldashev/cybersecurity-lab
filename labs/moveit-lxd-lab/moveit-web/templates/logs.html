@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Logs | MOVEit Transfer{% endblock %}
+{% block content %}
+<div class="moveit-page-title">Logs</div>
+
+<div class="moveit-toolbar">
+  <button type="button" class="moveit-btn">Customize View</button>
+  <button type="button" class="moveit-btn">Edit Filter</button>
+  <button type="button" class="moveit-btn">Favorite Filters</button>
+  <button type="button" class="moveit-btn">Save Current View To Favorites</button>
+  <button type="button" class="moveit-btn">Export Current View</button>
+</div>
+
+<div class="moveit-muted mb-4"><strong>Current Filter(s):</strong> Date is between 7/1/2025 12:00:00 AM and 7/1/2025 11:59:59 PM</div>
+
+<section class="moveit-section">
+  <div class="moveit-section-header">
+    <div class="left"><i class="bi bi-caret-down-fill"></i> Log Entries</div>
+    <span>Page 1 of 2</span>
+  </div>
+  <div class="moveit-card p-3">
+    <table class="moveit-table">
+      <thead>
+        <tr>
+          <th>Date and Time</th>
+          <th>Action</th>
+          <th>User Full Name</th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in db_logs %}
+        <tr>
+          <td>{{ row["created_at"] }}</td>
+          <td>{{ row["action"] }}</td>
+          <td><a href="{{ url_for('admin') }}" class="user-link">{{ row["actor"] }}</a></td>
+          <td>{{ row["source_ip"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="moveit-toolbar mt-3">
+      <button type="button" class="moveit-btn">Customize View</button>
+      <button type="button" class="moveit-btn">Edit Filter</button>
+      <button type="button" class="moveit-btn">Favorite Filters</button>
+      <button type="button" class="moveit-btn">Save Current View To Favorites</button>
+      <button type="button" class="moveit-btn">Export Current View</button>
+    </div>
+
+    <div class="moveit-log-box mt-3">
+      {% for line in filesystem_logs %}
+      <div>{{ line }}</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

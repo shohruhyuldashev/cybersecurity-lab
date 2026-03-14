@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Packages | MOVEit Transfer{% endblock %}
+{% block content %}
+<div class="moveit-page-title">Packages</div>
+
+<div class="moveit-toolbar">
+  <button type="button" class="moveit-btn">Drop files to upload...</button>
+  <button type="button" class="moveit-btn moveit-btn-primary" id="browse-button">Upload Files</button>
+  <button type="button" class="moveit-btn">Add Folder</button>
+  <button type="button" class="moveit-btn">Sharing and Settings</button>
+</div>
+
+<section class="moveit-section">
+  <div class="moveit-section-header">
+    <div class="left"><i class="bi bi-caret-down-fill"></i> New Package</div>
+    <span>Managed delivery workflow</span>
+  </div>
+  <div class="moveit-card p-3">
+    <form method="post" enctype="multipart/form-data" id="upload-form">
+      <div class="dropzone" id="dropzone">
+        <input type="file" name="file" id="file-input" class="d-none" required>
+        <div class="dropzone-copy">
+          <h3>Drop files to upload</h3>
+          <p>Accepted formats: PDF, CSV, DOCX, XLSX, ZIP, PNG, JSON, XML, TXT</p>
+          <div class="selected-file" id="selected-file">No file selected</div>
+        </div>
+      </div>
+
+      <div class="moveit-form-grid mt-3">
+        <div class="moveit-field">
+          <label for="business_unit">Business Unit</label>
+          <select class="moveit-select" id="business_unit" name="business_unit">
+            <option>Operations</option>
+            <option>Finance</option>
+            <option>Legal</option>
+            <option>Compliance</option>
+          </select>
+        </div>
+        <div class="moveit-field">
+          <label for="retention">Retention Policy</label>
+          <select class="moveit-select" id="retention" name="retention">
+            <option>30 days</option>
+            <option>90 days</option>
+            <option>180 days</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="moveit-form-grid single mt-3">
+        <div class="moveit-field">
+          <label for="description">Description</label>
+          <input class="moveit-input" id="description" type="text" name="description" placeholder="Short summary of the transfer package">
+        </div>
+        <div class="moveit-field">
+          <label for="notes">Transfer Notes</label>
+          <textarea class="moveit-textarea" id="notes" name="notes" placeholder="Describe the transfer package, destination party, or special review instructions."></textarea>
+        </div>
+      </div>
+
+      {% if review_target %}
+      <div class="moveit-auth-note mt-3">{{ review_target }}</div>
+      {% endif %}
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="moveit-muted">Uploads are scanned and assigned a release state automatically.</div>
+        <button type="submit" class="moveit-btn moveit-btn-primary">Submit Package</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Folders | MOVEit Transfer{% endblock %}
+{% block content %}
+<div class="moveit-page-title">Folders</div>
+
+<div class="moveit-toolbar">
+  <button type="button" class="moveit-btn">Customize View</button>
+  <button type="button" class="moveit-btn">New Folder</button>
+  <button type="button" class="moveit-btn">Sharing and Settings</button>
+  <a href="{{ url_for('upload') }}" class="moveit-btn moveit-btn-primary">Upload Files</a>
+</div>
+
+<section class="moveit-section">
+  <div class="moveit-section-header">
+    <div class="left"><i class="bi bi-caret-down-fill"></i> Folder Contents</div>
+    <span>{{ files|length }} item(s)</span>
+  </div>
+  <div class="moveit-card">
+    <table class="moveit-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Size/Contents</th>
+          <th>Status</th>
+          <th>Creator</th>
+          <th>Created</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in files %}
+        <tr>
+          <td><a href="{{ url_for('uploaded_file', filename=row['original_name']) }}" class="file-link">{{ row["original_name"] }}</a></td>
+          <td>{{ row["description"] or "-" }}</td>
+          <td>{{ "{:,}".format(row["size"]) }} bytes</td>
+          <td>{{ row["status"] }}</td>
+          <td><a href="{{ url_for('admin') }}" class="user-link">{{ user["username"] }}</a></td>
+          <td>{{ row["uploaded_at"] }}</td>
+          <td>{{ row["notes"] or "-" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

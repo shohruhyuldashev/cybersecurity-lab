@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Settings | MOVEit Transfer{% endblock %}
+{% block content %}
+<div class="moveit-page-title">Settings (Appearance)</div>
+
+<section class="moveit-section">
+  <div class="moveit-card p-3">
+    <h2 class="moveit-page-title mb-3">Logo &amp; Header Images</h2>
+    <p class="moveit-muted">Customize MOVEit Transfer with your logo.</p>
+
+    <div class="moveit-form-grid mt-4">
+      <div class="moveit-field">
+        <label>Left-Side Logo</label>
+        <button type="button" class="moveit-btn moveit-btn-primary w-100">Browse...</button>
+      </div>
+      <div class="moveit-card p-3 d-flex align-items-center justify-content-center">
+        <div class="moveit-brand-panel w-100" style="min-height: 68px; border-right: 0;">
+          <div class="moveit-brand">
+            <span class="moveit-brand-title">MOVEit</span>
+            <span class="moveit-brand-subtitle">TRANSFER</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="moveit-form-grid mt-3">
+      <div class="moveit-field">
+        <label>Right-Side Logo (Optional)</label>
+        <button type="button" class="moveit-btn moveit-btn-primary w-100">Browse...</button>
+      </div>
+      <div class="moveit-card p-3"></div>
+    </div>
+
+    <div class="moveit-form-grid mt-3">
+      <div class="moveit-field">
+        <label>Header Background Image (Optional)</label>
+        <button type="button" class="moveit-btn moveit-btn-primary w-100">Browse...</button>
+      </div>
+      <div class="moveit-card p-3"></div>
+    </div>
+
+    <div class="moveit-page-title mt-4">Preview</div>
+    <div class="moveit-topbar" style="grid-template-columns: 218px 1fr;">
+      <div class="moveit-brand-panel"></div>
+      <div class="moveit-header-main">
+        <div class="moveit-tagline" style="height: 52px; font-size: 18px;">Enterprise Managed File Transfer - Made Easy</div>
+      </div>
+    </div>
+
+    <div class="moveit-toolbar mt-3">
+      <button type="button" class="moveit-btn moveit-btn-primary">Save</button>
+      <button type="button" class="moveit-btn">Cancel</button>
+    </div>
+  </div>
+</section>
+
+<section class="moveit-section">
+  <div class="moveit-card p-3">
+    <h2 class="moveit-page-title mb-3">Provisioned Users</h2>
+    <table class="moveit-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Full Name</th>
+          <th>Last Login</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in users %}
+        <tr>
+          <td><a href="{{ url_for('admin') }}" class="user-link">{{ row["username"] }}</a></td>
+          <td>{{ row["role"] }}</td>
+          <td>{{ row["full_name"] }}</td>
+          <td>{{ row["last_login"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="moveit-section">
+  <div class="moveit-card p-3">
+    <h2 class="moveit-page-title mb-3">System Checks</h2>
+    <div class="moveit-health-list">
+      {% for name, state in system_checks %}
+      <div class="moveit-health-item">
+        <span class="moveit-health-dot"></span>
+        <div><strong>{{ name }}</strong><br>{{ state }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

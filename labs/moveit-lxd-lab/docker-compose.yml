@@ -1,0 +1,79 @@
+services:
+
+  mysql:
+    image: mysql:8.1
+    container_name: moveit-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: moveit
+      MYSQL_USER: moveit
+      MYSQL_PASSWORD: moveitpass
+
+    ports:
+      - "3306:3306"
+
+    entrypoint:
+      - sh
+      - -c
+      - |
+        umask 000
+        exec /usr/local/bin/docker-entrypoint.sh mysqld
+
+    command: --secure-file-priv=
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - uploads:/var/www/uploads
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./mysql/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+
+    restart: unless-stopped
+
+
+  moveit-web:
+    build:
+      context: ./moveit-web
+
+    container_name: moveit-web
+    hostname: moveit-web
+
+    depends_on:
+      - mysql
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SECRET_KEY: "enterprise-transfer-lab"
+      DB_HOST: "mysql"
+      DB_PORT: "3306"
+      DB_NAME: "moveit"
+      DB_USER: "moveit"
+      DB_PASS: "moveitpass"
+
+    volumes:
+      - uploads:/var/www/uploads
+      - /var/snap/lxd/common/lxd/unix.socket:/var/snap/lxd/common/lxd/unix.socket
+
+    read_only: true
+
+    tmpfs:
+      - /home/www-data:uid=33,gid=33
+      - /tmp:size=512m
+      - /opt/devops:uid=33,gid=33
+      - /opt/backups:uid=33,gid=33
+      - /var/log/moveit:uid=33,gid=33
+
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+
+    restart: unless-stopped
+
+
+volumes:
+  mysql_data:
+  uploads:

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MOVEit Transfer{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+  {% if session.get('user') %}
+  <div class="moveit-shell">
+    <header class="moveit-topbar">
+      <div class="moveit-brand-panel">
+        <a href="{{ url_for('dashboard') }}" class="moveit-brand" aria-label="MOVEit Transfer home">
+          <span class="moveit-brand-title">MOVEit</span>
+          <span class="moveit-brand-subtitle">TRANSFER</span>
+        </a>
+      </div>
+      <div class="moveit-header-main">
+        <div class="moveit-tagline">Enterprise Managed File Transfer - Made Easy</div>
+        <div class="moveit-accountbar">
+          <div class="moveit-account-status">
+            Signed onto ACME Corp as {{ session['user']['full_name'] }} ({{ session['user']['username'] }})
+          </div>
+          <nav class="moveit-account-links" aria-label="Account links">
+            <a href="{{ url_for('admin') }}">My Account</a>
+            <a href="{{ url_for('logout') }}">Sign Out</a>
+            <a href="{{ url_for('logs') }}">Help</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="moveit-workspace">
+      <aside class="moveit-sidebar">
+        <nav class="moveit-nav">
+          <a href="{{ url_for('dashboard') }}" class="moveit-nav-link {% if request.path == '/dashboard' %}active{% endif %}">
+            <i class="bi bi-house-door"></i><span>Home</span>
+          </a>
+          <a href="{{ url_for('admin') }}" class="moveit-nav-link {% if request.path == '/admin' %}active{% endif %}">
+            <i class="bi bi-people"></i><span>Users</span>
+          </a>
+          <a href="{{ url_for('admin') }}" class="moveit-nav-link">
+            <i class="bi bi-diagram-3"></i><span>Groups</span>
+          </a>
+          <a href="{{ url_for('files') }}" class="moveit-nav-link {% if request.path == '/files' %}active{% endif %}">
+            <i class="bi bi-folder"></i><span>Folders</span>
+          </a>
+          <a href="{{ url_for('upload') }}" class="moveit-nav-link {% if request.path == '/upload' %}active{% endif %}">
+            <i class="bi bi-box-seam"></i><span>Packages</span>
+          </a>
+          <a href="{{ url_for('dashboard') }}" class="moveit-nav-link">
+            <i class="bi bi-person-lines-fill"></i><span>Contacts</span>
+          </a>
+          <a href="{{ url_for('dashboard') }}" class="moveit-nav-link">
+            <i class="bi bi-activity"></i><span>Live View</span>
+          </a>
+          <a href="{{ url_for('logs') }}" class="moveit-nav-link {% if request.path == '/logs' %}active{% endif %}">
+            <i class="bi bi-card-list"></i><span>Logs</span>
+          </a>
+          <a href="{{ url_for('dashboard') }}" class="moveit-nav-link">
+            <i class="bi bi-bar-chart"></i><span>Reports</span>
+          </a>
+          <a href="{{ url_for('admin') }}" class="moveit-nav-link">
+            <i class="bi bi-gear"></i><span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="moveit-search-panel">
+          <div class="moveit-search-title"><i class="bi bi-search"></i> Search</div>
+          <div class="moveit-search-box">
+            <input type="text" placeholder="Find File/Folder">
+            <button type="button" aria-label="Search files"><i class="bi bi-search"></i></button>
+          </div>
+          <div class="moveit-search-box">
+            <input type="text" placeholder="Find User">
+            <button type="button" aria-label="Search users"><i class="bi bi-search"></i></button>
+          </div>
+          <div class="moveit-folder-jump">
+            <select>
+              <option>Go To Folder...</option>
+              <option>Inbox</option>
+              <option>Home</option>
+              <option>Archive</option>
+            </select>
+            <button type="button">Go</button>
+          </div>
+          <p class="moveit-sidebar-note">
+            Unless otherwise specified, all time and date stamps displayed on this site are UTC 0.
+          </p>
+          <div class="moveit-powered">Powered by <strong>Progress</strong> MOVEit</div>
+        </div>
+      </aside>
+
+      <main class="moveit-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="moveit-flash-stack">
+              {% for category, message in messages %}
+                <div class="moveit-inline-alert alert-{{ category }}">
+                  <span class="moveit-inline-alert-icon">
+                    {% if category == 'success' %}
+                    <i class="bi bi-check-lg"></i>
+                    {% elif category == 'warning' %}
+                    <i class="bi bi-exclamation-lg"></i>
+                    {% else %}
+                    <i class="bi bi-info-lg"></i>
+                    {% endif %}
+                  </span>
+                  <div>{{ message }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+  {% else %}
+    {% block auth_content %}{% endblock %}
+  {% endif %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

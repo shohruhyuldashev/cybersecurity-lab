@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Sign In | MOVEit Transfer{% endblock %}
+{% block auth_content %}
+<div class="moveit-login-page">
+  <div class="moveit-auth-shell">
+    <div class="moveit-auth-header">
+      <div class="moveit-brand-panel">
+        <div class="moveit-brand">
+          <span class="moveit-brand-title">MOVEit</span>
+          <span class="moveit-brand-subtitle">TRANSFER</span>
+        </div>
+      </div>
+      <div class="moveit-header-main">
+        <div class="moveit-tagline">Enterprise Managed File Transfer - Made Easy</div>
+      </div>
+    </div>
+
+    <div class="moveit-auth-grid">
+      <div class="moveit-auth-main">
+        <h1 class="moveit-auth-title">Sign in to MOVEit Transfer</h1>
+        <p class="moveit-auth-copy">Use your managed account to access packages, folders, logs, and administrative workflows.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="moveit-flash-stack">
+              {% for category, message in messages %}
+                <div class="moveit-inline-alert alert-{{ category }}">
+                  <span class="moveit-inline-alert-icon"><i class="bi bi-info-lg"></i></span>
+                  <div>{{ message }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        <form method="post">
+          <div class="moveit-form-grid single">
+            <div class="moveit-field">
+              <label for="username">Username</label>
+              <input class="moveit-input" id="username" type="text" name="username" placeholder="marketing.admin" required>
+            </div>
+            <div class="moveit-field">
+              <label for="password">Password</label>
+              <input class="moveit-input" id="password" type="password" name="password" placeholder="Password" required>
+            </div>
+          </div>
+          <div class="moveit-toolbar mt-3">
+            <button type="submit" class="moveit-btn moveit-btn-primary">Sign In</button>
+          </div>
+        </form>
+        <div class="moveit-auth-footer">Need an operator account? <a href="{{ url_for('register') }}">Register a new user</a></div>
+      </div>
+
+      <div class="moveit-auth-side">
+        <h2>Managed Exchange Workspace</h2>
+        <ul>
+          <li>Upload, send, and request files from one interface.</li>
+          <li>Review folders, package status, and audit logs.</li>
+          <li>Mirror the legacy Progress MOVEit Transfer operator experience.</li>
+        </ul>
+        <div class="moveit-auth-note">
+          Public version notes are available at <code>/readme.txt</code> for lab simulation.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

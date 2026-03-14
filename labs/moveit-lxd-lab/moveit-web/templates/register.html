@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Register | MOVEit Transfer{% endblock %}
+{% block auth_content %}
+<div class="moveit-login-page">
+  <div class="moveit-auth-shell">
+    <div class="moveit-auth-header">
+      <div class="moveit-brand-panel">
+        <div class="moveit-brand">
+          <span class="moveit-brand-title">MOVEit</span>
+          <span class="moveit-brand-subtitle">TRANSFER</span>
+        </div>
+      </div>
+      <div class="moveit-header-main">
+        <div class="moveit-tagline">Enterprise Managed File Transfer - Made Easy</div>
+      </div>
+    </div>
+
+    <div class="moveit-auth-grid">
+      <div class="moveit-auth-main">
+        <h1 class="moveit-auth-title">Create your workspace account</h1>
+        <p class="moveit-auth-copy">Register an operator profile for managed file exchange workflows and audit-ready activity tracking.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="moveit-flash-stack">
+              {% for category, message in messages %}
+                <div class="moveit-inline-alert alert-{{ category }}">
+                  <span class="moveit-inline-alert-icon"><i class="bi bi-info-lg"></i></span>
+                  <div>{{ message }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        <form method="post">
+          <div class="moveit-form-grid single">
+            <div class="moveit-field">
+              <label for="full_name">Full Name</label>
+              <input class="moveit-input" id="full_name" type="text" name="full_name" placeholder="Benjamin Hall" required>
+            </div>
+            <div class="moveit-field">
+              <label for="username">Username</label>
+              <input class="moveit-input" id="username" type="text" name="username" placeholder="b.hall" required>
+            </div>
+            <div class="moveit-field">
+              <label for="password">Password</label>
+              <input class="moveit-input" id="password" type="password" name="password" placeholder="At least 10 characters" required>
+            </div>
+            <div class="moveit-field">
+              <label for="confirm_password">Confirm Password</label>
+              <input class="moveit-input" id="confirm_password" type="password" name="confirm_password" placeholder="Repeat password" required>
+            </div>
+          </div>
+          <div class="moveit-toolbar mt-3">
+            <button type="submit" class="moveit-btn moveit-btn-primary">Create Account</button>
+          </div>
+        </form>
+        <div class="moveit-auth-footer">Already provisioned? <a href="{{ url_for('login') }}">Sign in to the transfer console</a></div>
+      </div>
+
+      <div class="moveit-auth-side">
+        <h2>Enterprise Onboarding</h2>
+        <ul>
+          <li>Strong password storage for registered users.</li>
+          <li>Centralized package uploads and review workflow.</li>
+          <li>UI styled to closely resemble MOVEit Transfer.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

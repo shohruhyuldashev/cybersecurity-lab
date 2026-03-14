@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Home | MOVEit Transfer{% endblock %}
+{% block content %}
+<div class="moveit-banner warning">
+  <div class="moveit-banner-icon"><i class="bi bi-exclamation-lg"></i></div>
+  <div>
+    <strong>Action Required: Aged Files Detected</strong><br>
+    Some files in your system have exceeded the 180-day retention limit set by your organization.
+    This reminder will remain visible until those files are removed. For guidance on resolving this,
+    please see the <a href="{{ url_for('files') }}">File Aging Help</a>.
+  </div>
+</div>
+
+<div class="moveit-banner success mt-3">
+  <div class="moveit-banner-icon"><i class="bi bi-check-lg"></i></div>
+  <div><strong>Welcome to FTDEV! Please watch this area for important messages.</strong></div>
+</div>
+
+<div class="moveit-summary-grid">
+  <a href="{{ url_for('upload') }}" class="moveit-action-tile">
+    <i class="bi bi-folder-symlink"></i>
+    <strong>Upload</strong>
+  </a>
+  <a href="{{ url_for('upload') }}" class="moveit-action-tile">
+    <i class="bi bi-envelope-paper"></i>
+    <strong>Send Package</strong>
+  </a>
+  <a href="{{ url_for('upload') }}" class="moveit-action-tile">
+    <i class="bi bi-envelope-open"></i>
+    <strong>Request Files</strong>
+  </a>
+  <div class="moveit-shortcuts">
+    <a href="{{ url_for('files') }}"><i class="bi bi-inbox"></i> Inbox</a>
+    <a href="{{ url_for('files') }}"><i class="bi bi-download"></i> Recent Downloads</a>
+    <a href="{{ url_for('dashboard') }}"><i class="bi bi-person-lines-fill"></i> Contacts</a>
+    <a href="{{ url_for('files') }}"><i class="bi bi-folder2-open"></i> Home Folder</a>
+  </div>
+</div>
+
+<div class="moveit-stats-grid">
+  <section class="moveit-section">
+    <div class="moveit-session-summary">
+      <h2>Session Summary</h2>
+      <div class="moveit-session-summary-row">
+        <div>By Interface:</div>
+        <div class="text-end">Web: 1</div>
+      </div>
+      <div class="moveit-session-summary-row">
+        <div>Totals:</div>
+        <div class="text-end">Unique Users: 1</div>
+      </div>
+      <div class="moveit-session-summary-row">
+        <div><a href="{{ url_for('dashboard') }}">Session Manager</a></div>
+        <div class="text-end">Sessions: 1</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moveit-section">
+    <div class="moveit-card p-3">
+      <div class="moveit-health-list">
+        <div class="moveit-health-item">
+          <span class="moveit-health-dot"></span>
+          <div><strong>Total Files</strong><br>{{ total_files }} tracked items</div>
+        </div>
+        <div class="moveit-health-item">
+          <span class="moveit-health-dot"></span>
+          <div><strong>Released Packages</strong><br>{{ released }} available for retrieval</div>
+        </div>
+        <div class="moveit-health-item">
+          <span class="moveit-health-dot"></span>
+          <div><strong>Quarantined Items</strong><br>{{ pending }} pending review</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="moveit-section">
+  <div class="moveit-section-header">
+    <div class="left"><i class="bi bi-caret-down-fill"></i> New Files ({{ recent_uploads|length }})</div>
+    <a href="{{ url_for('files') }}" class="moveit-linkline">View all new</a>
+  </div>
+  <div class="moveit-card">
+    <table class="moveit-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Folder</th>
+          <th>Size</th>
+          <th>Creator</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in recent_uploads %}
+        <tr>
+          <td><a href="{{ url_for('files') }}" class="file-link">{{ row["original_name"] }}</a></td>
+          <td>Home</td>
+          <td>{{ "{:,}".format(row["size"]) }} bytes</td>
+          <td><a href="{{ url_for('admin') }}" class="user-link">{{ user["username"] }}</a></td>
+          <td>{{ row["uploaded_at"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
