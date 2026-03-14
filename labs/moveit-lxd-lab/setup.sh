@@ -267,6 +267,17 @@ wait_for_containers() {
     warn "Container did not report as running within the expected window. Check 'docker ps' and compose logs if needed."
 }
 
+configure_domain() {
+    log "Configuring local domain moveit.vm..."
+
+    if ! grep -q "moveit.vm" /etc/hosts; then
+        echo "127.0.0.1 moveit.vm" >> /etc/hosts
+        success "Domain moveit.vm added to /etc/hosts"
+    else
+        log "Domain moveit.vm already present in /etc/hosts"
+    fi
+}
+
 print_summary() {
     cat <<EOF
 
@@ -302,6 +313,7 @@ main() {
     configure_lxd_socket_acl
     create_host_flag
     wait_for_containers
+    configure_domain
     print_summary
 }
 

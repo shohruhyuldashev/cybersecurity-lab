@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
+from flask import request, redirect
 
 import bcrypt
 import mysql.connector
@@ -29,6 +30,11 @@ DB_CONFIG = {
 ALLOWED_EXTENSIONS = {"txt", "pdf", "csv", "docx", "xlsx", "zip", "png", "json", "xml"}
 
 app = Flask(__name__)
+
+@app.before_request
+def enforce_moveit_domain():
+    if request.host.split(':')[0] != "moveit.vm":
+        return redirect("http://moveit.vm" + request.full_path, code=301)
 
 @app.after_request
 def add_headers(response):
