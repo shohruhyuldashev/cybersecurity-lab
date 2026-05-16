@@ -1,0 +1,165 @@
+version: '3.8'
+services:
+  nginx-proxy:
+    image: nginx:latest
+    ports:
+    - 80:80
+    volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./html:/usr/share/nginx/html:ro
+    depends_on:
+    - wordpress
+    - joomla
+    - drupal
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.100
+    restart: unless-stopped
+
+  db-wp:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.2
+    restart: unless-stopped
+
+  wordpress:
+    build: ./wordpress-custom
+    environment:
+      WORDPRESS_DB_HOST: 172.20.0.2:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wordpress
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.3
+    volumes:
+    - ./flags/wp/flag3_comment.txt:/var/www/html/wp-content/flag3_comment.txt:ro
+    - ./flags/wp/flag4_draft.txt:/var/www/html/wp-content/flag4_draft.txt:ro
+    - ./flags/wp/flag5_config.txt:/var/www/html/flag5_config.txt:ro
+    - ./flags/wp/flag6_rce.txt:/flag_wp.txt:ro
+    depends_on:
+    - db-wp
+    restart: unless-stopped
+
+  db-joomla:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: joomla
+      MYSQL_USER: joomla_user
+      MYSQL_PASSWORD: S3cur3J00ml4P4ssw0rd!
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.4
+    restart: unless-stopped
+
+  joomla:
+    build: ./joomla-custom
+    environment:
+      JOOMLA_DB_HOST: 172.20.0.4:3306
+      JOOMLA_DB_USER: joomla_user
+      JOOMLA_DB_PASSWORD: S3cur3J00ml4P4ssw0rd!
+      JOOMLA_DB_NAME: joomla
+      JOOMLA_ADMIN_PASSWORD: J00ml4_Admin!
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.5
+    volumes:
+    - ./joomla-custom/joomla-entrypoint.sh:/joomla-entrypoint.sh:ro
+    - ./flags/joomla/flag7_joomla.xml:/tmp/flags/flag7_joomla.xml:ro
+    - ./flags/joomla/flag8_config.txt:/tmp/flags/flag8_config.txt:ro
+    - ./flags/joomla/flag9_rce.txt:/tmp/flags/flag9_rce.txt:ro
+    depends_on:
+    - db-joomla
+    restart: unless-stopped
+
+  db-drupal:
+    image: postgres:10
+    environment:
+      POSTGRES_DB: drupal
+      POSTGRES_USER: drupal_user
+      POSTGRES_PASSWORD: drupal_password
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.6
+    restart: unless-stopped
+
+  drupal:
+    build: ./drupal-custom
+    environment:
+      POSTGRES_HOST: 172.20.0.6
+      POSTGRES_DB: drupal
+      POSTGRES_USER: drupal_user
+      POSTGRES_PASSWORD: drupal_password
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.7
+    volumes:
+    - ./drupal-custom/drupal-entrypoint.sh:/drupal-entrypoint.sh:ro
+    - ./flags/drupal/flag10_changelog.txt:/tmp/flags/flag10_changelog.txt:ro
+    - ./flags/drupal/flag11_rce.txt:/tmp/flags/flag11_rce.txt:ro
+    depends_on:
+    - db-drupal
+    restart: unless-stopped
+
+  tomcat:
+    image: tomcat:8.5.32
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.8
+    volumes:
+    - ./flags/tomcat/flag12_banner.txt:/usr/local/tomcat/webapps/ROOT/flag12_banner.txt:ro
+    - ./flags/tomcat/flag13_manager.txt:/usr/local/tomcat/webapps/manager/flag13_manager.txt:ro
+    - ./flags/tomcat/flag14_war.txt:/root/flag14_war.txt:ro
+    - ./flags/tomcat/flag15_rce.txt:/root/tomcat_flag.txt:ro
+    restart: unless-stopped
+
+  jenkins:
+    image: jenkins/jenkins:2.263
+    user: root
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.9
+    volumes:
+    - ./flags/jenkins/flag16_build.txt:/var/jenkins_home/jobs/Project Alpha/flag16_build.txt:ro
+    - ./flags/jenkins/flag17_rce.txt:/var/jenkins_home/flag.txt:ro
+    - ./flags/jenkins/flag18_win.txt:/var/jenkins_home/C_drive_flag.txt:ro
+    restart: unless-stopped
+    mem_limit: 1536m
+
+  splunk:
+    image: splunk/splunk:8.0.0
+    environment:
+    - SPLUNK_START_ARGS=--accept-license
+    - SPLUNK_PASSWORD=adminadmin
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.10
+    volumes:
+    - ./flags/splunk/flag19_dash.txt:/opt/splunk/etc/apps/search/default/data/ui/views/flag19_dash.txt
+    - ./flags/splunk/flag20_rce.txt:/opt/splunk/flag.txt
+    restart: unless-stopped
+    mem_limit: 1536m
+
+  cgi-bin:
+    build: ./cgi-bin-server
+    networks:
+      ctf_net:
+        ipv4_address: 172.20.0.11
+    volumes:
+    - ./flags/cgi/flag21_cgi.txt:/usr/lib/cgi-bin/flag21.txt:ro
+    - ./flags/cgi/flag22_shellshock.txt:/flag.txt:ro
+    restart: unless-stopped
+
+networks:
+  ctf_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

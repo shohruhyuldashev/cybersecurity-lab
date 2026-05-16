@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HAAD.LOCAL CTF Dashboard</title>
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Courier New', Courier, monospace; padding: 40px; }
+        h1 { color: #58a6ff; }
+        .tree { margin-left: 20px; border-left: 1px solid #30363d; padding-left: 20px; }
+        .node { margin: 10px 0; }
+        .node::before { content: "├── "; color: #8b949e; }
+        .last-node::before { content: "└── "; color: #8b949e; }
+        .rules { background-color: #161b22; padding: 20px; border-radius: 5px; margin-top: 30px; border: 1px solid #30363d; }
+        .rules h2 { color: #3fb950; margin-top: 0; }
+        li { margin-bottom: 10px; }
+        code { background-color: #21262d; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>HAAD.LOCAL CTF Architecture</h1>
+    <p>Welcome to the Attacking Common Applications CTF. Below is the 1st layer of the infrastructure map:</p>
+    
+    <div>
+        haad.local (Main Gateway)
+        <div class="tree">
+            <div class="node">wordpress.haad.local (CMS)</div>
+            <div class="node">joomla.haad.local (CMS)</div>
+            <div class="node">drupal.haad.local (CMS)</div>
+            <div class="node">tomcat.haad.local (Servlet Container)</div>
+            <div class="node">jenkins.haad.local (CI/CD)</div>
+            <div class="node">splunk.haad.local (SIEM / Log Analytics)</div>
+            <div class="node">cgi.haad.local (CGI / Shell scripts)</div>
+            <div class="last-node">gitlab.haad.local (Version Control)</div>
+        </div>
+    </div>
+
+    <div class="rules">
+        <h2>Challenge Rules & Conditions</h2>
+        <ul>
+            <li><strong>Reconnaissance:</strong> Map out the subdomains and enumerate running services and versions using manual enumeration methods (API endpoints, default paths, HTTP headers).</li>
+            <li><strong>Exploitation:</strong> Exploit known vulnerabilities and misconfigurations discovered during enumeration.</li>
+            <li><strong>Flags:</strong> Each service contains hidden flags. Retrieve them by following the attack chains learned in the HTB Academy.</li>
+            <li><strong>Restrictions:</strong> Internal file systems of the subdomains are purposefully hidden from this visual map. You must gain RCE or LFI to explore them.</li>
+            <li><strong>Hint:</strong> Start by doing directory brute-forcing on this main gateway.</li>
+        </ul>
+    </div>
+</body>
+</html>
