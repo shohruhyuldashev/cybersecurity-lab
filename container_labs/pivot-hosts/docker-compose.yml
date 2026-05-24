@@ -1,0 +1,78 @@
+version: "3.8"
+
+networks:
+  net1:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.10.0/24
+  net2:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
+  net3:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
+
+services:
+  # ─── VM1: Entry Point (DocuShare) ─────────────────────────────────────────
+  # Attacker sees this. Vulns: LFI (php://filter, expect://), privesc via writable cronjob
+  vm1:
+    build:
+      context: ./vm1
+      dockerfile: Dockerfile
+    image: ctf-vm1:latest
+    container_name: ctf-vm1
+    hostname: docushare-srv
+    networks:
+      net1:
+        ipv4_address: 10.10.10.10
+      net2:
+        ipv4_address: 172.16.0.10
+    ports:
+      - "8081:80"       # Expose to attacker machine
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  # ─── VM2: Internal API (InternalAPI) ──────────────────────────────────────
+  # Only reachable from VM1. Vulns: IDOR, /api/admin/download RCE, compiled binary with hardcoded pass
+  vm2:
+    build:
+      context: ./vm2
+      dockerfile: Dockerfile
+    image: ctf-vm2:latest
+    container_name: ctf-vm2
+    hostname: internalapi-srv
+    networks:
+      net2:
+        ipv4_address: 172.16.0.20
+      net3:
+        ipv4_address: 192.168.100.20
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    restart: unless-stopped
+
+  # ─── VM3: Deep Internal (AdminPanel) ──────────────────────────────────────
+  # Only reachable from VM2. Vulns: SQLi (login + search), python cap_setuid privesc
+  vm3:
+    build:
+      context: ./vm3
+      dockerfile: Dockerfile
+    image: ctf-vm3:latest
+    container_name: ctf-vm3
+    hostname: adminpanel-srv
+    networks:
+      net3:
+        ipv4_address: 192.168.100.30
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    privileged: true
+    restart: unless-stopped

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>InternalAPI Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#e6edf3;display:flex;min-height:100vh}
+.sidebar{width:240px;background:#161b22;border-right:1px solid #30363d;display:flex;flex-direction:column;position:fixed;height:100vh}
+.sb-brand{display:flex;align-items:center;gap:.6rem;padding:1.25rem 1rem;border-bottom:1px solid #30363d;font-weight:700}
+.sb-icon{width:30px;height:30px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.sb-nav{padding:1rem .75rem;flex:1}
+.sb-section{font-size:.7rem;color:#484f58;text-transform:uppercase;letter-spacing:.06em;padding:.3rem .5rem;margin-bottom:.3rem;margin-top:1rem}
+.sb-item{display:flex;align-items:center;gap:.65rem;padding:.55rem .75rem;border-radius:6px;color:#8b949e;text-decoration:none;font-size:.875rem;cursor:pointer;transition:all .15s}
+.sb-item:hover,.sb-item.active{background:#21262d;color:#e6edf3}
+.sb-footer{padding:.75rem;border-top:1px solid #30363d;font-size:.8rem;color:#484f58}
+.main{margin-left:240px;flex:1;padding:1.5rem;overflow-y:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+.topbar h1{font-size:1.2rem;font-weight:600}
+.badge{padding:.2rem .6rem;background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);border-radius:100px;font-size:.75rem;color:#58a6ff}
+.badge.admin{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.3);color:#a78bfa}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:1.25rem}
+.card h3{font-size:.8rem;color:#8b949e;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+.card .val{font-size:1.75rem;font-weight:700;color:#e6edf3}
+.card .sub2{font-size:.8rem;color:#484f58;margin-top:.2rem}
+.panel{background:#161b22;border:1px solid #30363d;border-radius:10px;margin-bottom:1.25rem}
+.panel-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid #30363d}
+.panel-hdr h2{font-size:.95rem;font-weight:600}
+.panel-body{padding:1.25rem}
+.req-box{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:1rem;font-family:monospace;font-size:.8rem;margin-bottom:.75rem}
+.req-box .method{color:#3fb950;font-weight:700}.req-box .url{color:#58a6ff}
+pre{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:1rem;font-family:monospace;font-size:.78rem;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:#e6edf3;max-height:320px;overflow-y:auto}
+.btn{padding:.5rem 1rem;border-radius:6px;border:none;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-blue{background:#2563eb;color:#fff}.btn-blue:hover{background:#1d4ed8}
+.btn-red{background:#da3633;color:#fff}.btn-red:hover{background:#b91c1c}
+.btn-sm{padding:.35rem .75rem;font-size:.75rem}
+input.inp{width:100%;padding:.55rem .8rem;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#e6edf3;font-size:.85rem;outline:none;margin-bottom:.6rem;font-family:monospace}
+input.inp:focus{border-color:#2563eb}
+.tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600}
+.tag-admin{background:rgba(124,58,237,.2);color:#a78bfa}.tag-user{background:rgba(37,99,235,.2);color:#58a6ff}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{padding:.6rem .85rem;text-align:left;font-size:.75rem;color:#8b949e;border-bottom:1px solid #30363d;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+td{padding:.75rem .85rem;border-bottom:1px solid rgba(48,54,61,.5);vertical-align:middle}
+tr:hover td{background:rgba(255,255,255,.02)}
+.logout-btn{background:none;border:none;color:#f85149;cursor:pointer;font-size:.85rem;padding:.4rem .75rem;border-radius:6px;display:flex;align-items:center;gap:.4rem}
+.logout-btn:hover{background:rgba(248,81,73,.1)}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-icon">⚡</div>
+    <span>InternalAPI</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Overview</div>
+    <a class="sb-item active" onclick="showSection('overview')">📊 Dashboard</a>
+    <div class="sb-section">API Explorer</div>
+    <a class="sb-item" onclick="showSection('users')">👥 Users</a>
+    {% if user and user.role == 'admin' %}
+    <div class="sb-section">Admin</div>
+    <a class="sb-item" onclick="showSection('admin')">⚙️ Admin Panel</a>
+    <a class="sb-item" onclick="showSection('rce')">📦 Package Manager</a>
+    {% endif %}
+  </nav>
+  <div class="sb-footer">
+    <div>{{ user.username if user else 'Unknown' }} ·
+      <span class="tag {{ 'tag-admin' if user and user.role == 'admin' else 'tag-user' }}">
+        {{ user.role if user else 'user' }}
+      </span>
+    </div>
+    <a href="/logout"><button class="logout-btn" style="margin-top:.5rem">🚪 Logout</button></a>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h1>API Dashboard</h1>
+    <span class="badge {{ 'admin' if user and user.role == 'admin' else '' }}">
+      {{ user.username if user else '?' }}
+    </span>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="section-overview">
+    <div class="grid">
+      <div class="card"><h3>Total Endpoints</h3><div class="val">7</div><div class="sub2">REST API endpoints</div></div>
+      <div class="card"><h3>Your Role</h3><div class="val">{{ user.role if user else '?' }}</div><div class="sub2">Access level</div></div>
+      <div class="card"><h3>User ID</h3><div class="val">{{ user.id if user else '?' }}</div><div class="sub2">Your user identifier</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><h2>System Status</h2></div>
+      <div class="panel-body">
+        <div class="req-box" style="color:#3fb950">● API Service Running &nbsp;·&nbsp; v1.4.0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div id="section-users" style="display:none">
+    <div class="panel">
+      <div class="panel-hdr">
+        <h2>GET /api/users</h2>
+        <button class="btn btn-blue btn-sm" onclick="fetchUsers()">Send Request</button>
+      </div>
+      <div class="panel-body">
+        <pre id="users-output">Click "Send Request" to list all users...</pre>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ADMIN -->
+  <div id="section-admin" style="display:none">
+    <div class="panel">
+      <div class="panel-hdr">
+        <h2>GET /api/admin</h2>
+        <button class="btn btn-blue btn-sm" onclick="fetchAdmin()">Send Request</button>
+      </div>
+      <div class="panel-body">
+        <pre id="admin-output">Click to load admin data...</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- PACKAGE MANAGER -->
+  <div id="section-rce" style="display:none">
+    <div class="panel">
+      <div class="panel-hdr"><h2>POST /api/admin/download</h2></div>
+      <div class="panel-body">
+        <div class="req-box">
+          <span class="method">POST</span> <span class="url">/api/admin/download</span><br>
+          Body: {"package": "package-name"}
+        </div>
+        <input class="inp" id="pkg-name" value='requests' placeholder='package name'>
+        <button class="btn btn-blue" onclick="sendDownload()" style="margin-bottom:.75rem">Install</button>
+        <pre id="rce-output">Admin only. Enter a package name...</pre>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function showSection(name) {
+  document.querySelectorAll('[id^="section-"]').forEach(el => el.style.display = 'none');
+  const el = document.getElementById('section-' + name);
+  if (el) el.style.display = 'block';
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  event.target.closest('.sb-item').classList.add('active');
+}
+async function api(url, opts={}) {
+  const r = await fetch(url, {headers:{'Content-Type':'application/json'}, ...opts});
+  return r.json();
+}
+async function fetchUsers() {
+  const d = await api('/api/users');
+  document.getElementById('users-output').textContent = JSON.stringify(d, null, 2);
+}
+async function fetchUser() {}
+async function upgradeSession() {}
+async function fetchAdmin() {
+  const d = await api('/api/admin');
+  document.getElementById('admin-output').textContent = JSON.stringify(d, null, 2);
+}
+async function sendDownload() {
+  const pkg = document.getElementById('pkg-name').value;
+  const d = await api('/api/admin/download', {
+    method:'POST', body: JSON.stringify({package: pkg})
+  });
+  document.getElementById('rce-output').textContent = JSON.stringify(d, null, 2);
+}
+</script>
+</body>
+</html>

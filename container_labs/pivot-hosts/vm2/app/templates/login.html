@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>InternalAPI - Login</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:2.5rem;width:100%;max-width:380px}
+.logo{display:flex;align-items:center;gap:.6rem;font-size:1.2rem;font-weight:700;margin-bottom:2rem;justify-content:center}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+h1{font-size:1.3rem;font-weight:600;text-align:center;margin-bottom:.4rem}
+.sub{color:#8b949e;font-size:.875rem;text-align:center;margin-bottom:2rem}
+label{display:block;font-size:.8rem;font-weight:500;color:#8b949e;margin-bottom:.4rem}
+input{width:100%;padding:.65rem .85rem;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#e6edf3;font-size:.875rem;outline:none;transition:border .2s;margin-bottom:1rem}
+input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+input::placeholder{color:#484f58}
+.btn{width:100%;padding:.7rem;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.875rem;font-weight:600;cursor:pointer;transition:background .2s}
+.btn:hover{background:#1d4ed8}
+.error{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:#ff7b72;padding:.7rem .9rem;border-radius:6px;font-size:.825rem;margin-bottom:1rem}
+.footer-note{margin-top:1.5rem;text-align:center;font-size:.75rem;color:#484f58}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <span>InternalAPI</span>
+  </div>
+  <h1>Sign In</h1>
+  <p class="sub">Access the internal API management console</p>
+
+  <div id="error-box" class="error" style="display:none"></div>
+
+  <div>
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter username" autocomplete="username">
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+    <button class="btn" onclick="doLogin()">Sign In</button>
+  </div>
+
+  <div class="footer-note">InternalAPI v1.4.0 · internal.corp</div>
+</div>
+<script>
+async function doLogin() {
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  const eb = document.getElementById('error-box');
+  eb.style.display='none';
+  try {
+    const r = await fetch('/login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username:u, password:p})
+    });
+    const d = await r.json();
+    if (d.success) {
+      window.location.href='/dashboard';
+    } else {
+      eb.textContent = d.error || 'Login failed';
+      eb.style.display='block';
+    }
+  } catch(e) {
+    eb.textContent='Network error';
+    eb.style.display='block';
+  }
+}
+document.addEventListener('keydown',(e)=>{if(e.key==='Enter')doLogin();});
+</script>
+</body>
+</html>
